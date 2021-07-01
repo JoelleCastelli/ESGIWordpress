@@ -23,9 +23,9 @@ class EsgiTmdbWidget extends WP_Widget
         $urlArray = [];
         foreach ($types as $type => $activated) {
             if($activated)
-                $urlArray[] = $tmdbBaseUrl.$type."?api_key=".$tmdbKey."&language=".$language."&region=fr&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
+                $urlArray[$type] = $tmdbBaseUrl.$type."?api_key=".$tmdbKey."&language=".$language."&region=fr&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
         }
-        $work = $this->getRandomTmdbEntry($urlArray);
+        $work = $this->esgi_get_random_tmdb_item($urlArray);
 
         $title = apply_filters('widget_title', $instance['title']);
         echo $before_widget . $before_title;
@@ -64,12 +64,18 @@ class EsgiTmdbWidget extends WP_Widget
         return $instance;
     }
 
-    public function getRandomTmdbEntry($urlArray){
+    public function esgi_get_random_tmdb_item($urlArray){
         if($urlArray) {
             $list = [];
-            foreach ($urlArray as $url) {
+            foreach ($urlArray as $type => $url) {
                 $responseBody = wp_remote_retrieve_body(wp_remote_get($url));
                 $results = json_decode($responseBody)->results;
+                foreach ($results as $index => $work) {
+                    $work = (array)$work;
+                    $work['type'] = $type;
+                    $work = (object)$work;
+                    $results[$index] = $work;
+                }
                 $list = array_merge($list, $results);
             }
             if(!empty($list)) return $list[rand(0, count($list) - 1)];
