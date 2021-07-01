@@ -3,9 +3,11 @@
 
 class EsgiTmdbWidget extends WP_Widget
 {
-    protected $tmdbApiBaseUrl = "https://api.themoviedb.org/3/discover/";
-    protected $tmdbImageUrl = "https://image.tmdb.org/t/p/w200";
-    protected $tmdbBaseUrl = "https://www.themoviedb.org/";
+    protected string $tmdbApiBaseUrl = "https://api.themoviedb.org/3/discover/";
+    protected string $tmdbImageUrl = "https://image.tmdb.org/t/p/w200";
+    protected string $tmdbBaseUrl = "https://www.themoviedb.org/";
+    protected string $language;
+    protected string $region;
 
     public function __construct()
     {
@@ -14,20 +16,19 @@ class EsgiTmdbWidget extends WP_Widget
             'ESGI TMDB Widget',
             ['description' => 'Widget issu du plugin ESGI TMDB']
         );
+        $this->language = str_replace("_", "-", get_locale());
+        $this->region = substr($this->language, 0, 2);
+        $this->tmdbKey = get_option('esgi_tmdb_settings')['tmdb-key'];
     }
 
     // Front
     public function widget($args, $instance)
     {
-        $language = str_replace("_", "-", get_locale());
-        $region = substr($language, 0, 2);
-        $tmdbKey = get_option('esgi_tmdb_settings')['tmdb-key'];
-
         $types = ["movie" => (bool)$instance['movieChecked'], "tv" => (bool)$instance['tvChecked']];
         $urlArray = [];
         foreach ($types as $type => $activated) {
             if($activated)
-                $urlArray[$type] = $this->tmdbApiBaseUrl.$type."?api_key=".$tmdbKey."&language=".$language."&region=".$region."&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
+                $urlArray[$type] = $this->tmdbApiBaseUrl.$type."?api_key=".$this->tmdbKey."&language=".$this->language."&region=".$this->region."&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
         }
         $work = $this->esgi_get_random_tmdb_item($urlArray);
         $preview = $this->esgi_display_tmdb_preview($work);
