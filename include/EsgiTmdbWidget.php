@@ -93,12 +93,13 @@ class EsgiTmdbWidget extends WP_Widget
 
         $name = $work->title ?? $work->name;
         $poster = $this->tmdbImageUrl.$work->poster_path;
-        $type = $work->type;
+        $type = $work->type == 'tv' ? "Série" : "Film";
         $url = $this->tmdbBaseUrl.$type.'/'.$work->id;
 
         $preview = "<a href='$url' target='_blank'><div class='esgi_tmdb_preview'>";
         $preview .= "<div class='esgi_tmdb_preview_poster'><img src='$poster'/></div>";
         $preview .= "<div class='esgi_tmdb_preview_name'>$name</div>";
+        $preview .= "<div class='esgi_tmdb_preview_type'>$type</div>";
         $preview .= "</div></a>";
 
         return $preview;
