@@ -64,14 +64,16 @@ function esgi_tmdb_settings(){
 }
 
 // Display the field
-function esgi_tmdb_display_field(){
+function esgi_tmdb_display_field()
+{
     $setting = get_option('esgi_tmdb_settings');
-    $value = !empty($setting['text']) ? $setting['text'] : '';
-    echo '<input class="regular-text" type="text" name="esgi_tmdb_settings[text]" value="'.esc_attr($value).'">';
+    $value = !empty($setting['tmdb-key']) ? $setting['tmdb-key'] : '';
+    echo '<input class="regular-text" type="text" name="esgi_tmdb_settings[tmdb-key]" value="' . esc_attr($value) . '">';
 }
 
-function esgi_tmdb_sanitize( $settings ){
-    $settings['text'] = ! empty( $settings['text'] ) ? sanitize_text_field( $settings['text'] ) : '';
+function esgi_tmdb_sanitize($settings)
+{
+    $settings['tmdb-key'] = !empty($settings['tmdb-key']) ? sanitize_text_field($settings['tmdb-key']) : '';
     return $settings;
 }
 
