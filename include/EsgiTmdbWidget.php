@@ -3,6 +3,9 @@
 
 class EsgiTmdbWidget extends WP_Widget
 {
+    protected $tmdbApiBaseUrl = "https://api.themoviedb.org/3/discover/";
+    protected $tmdbImageUrl = "https://image.tmdb.org/t/p/w200";
+    protected $tmdbBaseUrl = "https://www.themoviedb.org/";
 
     public function __construct()
     {
@@ -18,19 +21,21 @@ class EsgiTmdbWidget extends WP_Widget
     {
         $language = str_replace("_", "-", get_locale());
         $tmdbKey = get_option('esgi_tmdb_settings')['tmdb-key'];
-        $tmdbBaseUrl = "https://api.themoviedb.org/3/discover/";
+
         $types = ["movie" => (bool)$instance['movieChecked'], "tv" => (bool)$instance['tvChecked']];
         $urlArray = [];
         foreach ($types as $type => $activated) {
             if($activated)
-                $urlArray[$type] = $tmdbBaseUrl.$type."?api_key=".$tmdbKey."&language=".$language."&region=fr&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
+                $urlArray[$type] = $this->tmdbApiBaseUrl.$type."?api_key=".$tmdbKey."&language=".$language."&region=fr&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
         }
         $work = $this->esgi_get_random_tmdb_item($urlArray);
+        $preview = $this->esgi_display_tmdb_preview($work);
 
         $title = apply_filters('widget_title', $instance['title']);
         echo $before_widget . $before_title;
         echo '<h2 class="widget-title subheading heading-size-3">'.$title.'</h2>';
         echo $after_title;
+        echo $preview;
         echo $after_widget;
     }
 
@@ -82,4 +87,20 @@ class EsgiTmdbWidget extends WP_Widget
         }
         return false;
     }
+    
+    public function esgi_display_tmdb_preview($work) {
+
+        $name = $work->title ?? $work->name;
+        $poster = $this->tmdbImageUrl.$work->poster_path;
+        $type = $work->type;
+        $url = $this->tmdbBaseUrl.$type.'/'.$work->id;
+
+        $preview = "<a href='$url' target='_blank'><div class='esgi_tmdb_preview'>";
+        $preview .= "<div class='esgi_tmdb_preview_poster'><img src='$poster'/></div>";
+        $preview .= "<div class='esgi_tmdb_preview_name'>$name</div>";
+        $preview .= "</div></a>";
+
+        return $preview;
+    }
+
 }
