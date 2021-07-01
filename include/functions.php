@@ -114,6 +114,12 @@ class EsgiTmdbWidget extends WP_Widget
     }
 }
 
+// Activate widget
+add_action('widgets_init', 'esgi_tmdb_widgets');
+function esgi_tmdb_widgets(){
+    register_widget('EsgiTmdbWidget');
+}
+
 // Shortcodes
 add_shortcode('esgi-tmdb', 'esgi_tmdb_shortcode');
 function esgi_tmdb_shortcode($attributes) {
