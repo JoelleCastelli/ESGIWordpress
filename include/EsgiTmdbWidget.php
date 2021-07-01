@@ -16,7 +16,7 @@ class EsgiTmdbWidget extends WP_Widget
     {
         parent::__construct(
             'esgi_tmdb_widget',
-            'ESGI TMDB Widget',
+            'ESGI TMDB',
             ['description' => 'Widget issu du plugin ESGI TMDB']
         );
         $this->language = str_replace("_", "-", get_locale());
@@ -30,11 +30,7 @@ class EsgiTmdbWidget extends WP_Widget
     public function widget($args, $instance)
     {
         $types = ["movie" => (bool)$instance['movieChecked'], "tv" => (bool)$instance['tvChecked']];
-        $urlArray = [];
-        foreach ($types as $type => $activated) {
-            if($activated)
-                $urlArray[$type] = $this->tmdbApiBaseUrl."discover/$type?api_key=".$this->tmdbKey."&language=".$this->language."&region=".$this->region."&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
-        }
+        $urlArray = $this->esgi_generate_url_array($types);
         $work = $this->esgi_get_random_tmdb_item($urlArray);
         $preview = $this->esgi_display_tmdb_preview($work);
 
@@ -58,21 +54,28 @@ class EsgiTmdbWidget extends WP_Widget
 		</p>';?>
 
         <!--Media selection (Movie and/or TV shows)-->
-        Média :
         <p>
+            Média :<br>
             <input class="checkbox" type="checkbox" <?php checked( $instance['movieChecked'], 'on' ); ?> id="<?= $this->get_field_id('movieChecked'); ?>" name="<?= $this->get_field_name('movieChecked'); ?>" />
             <label for="<?= $this->get_field_id('movieChecked'); ?>">Films</label>
             <input class="checkbox" type="checkbox" <?php checked( $instance['tvChecked'], 'on' ); ?> id="<?= $this->get_field_id('tvChecked'); ?>" name="<?= $this->get_field_name('tvChecked'); ?>" />
             <label for="<?= $this->get_field_id('tvChecked'); ?>">Séries</label>
         </p>
+
+        <!--Movie genre selection-->
+        <p>
+            Genres :<br>
+            <?php $this->esgi_generate_movie_genres_checkboxes($instance);?>
+        </p>
     <?php }
 
-    public function update($new_instance, $old_instance)
+    public function update($new_instance, $old_instance): array
     {
         $instance = [];
         $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
         $instance['movieChecked'] = $new_instance['movieChecked'];
         $instance['tvChecked'] = $new_instance['tvChecked'];
+        $instance['tvGenres'][] = $new_instance['tvGenres'];
         return $instance;
     }
 
@@ -95,8 +98,8 @@ class EsgiTmdbWidget extends WP_Widget
         return false;
     }
     
-    public function esgi_display_tmdb_preview($work) {
-
+    public function esgi_display_tmdb_preview($work): string
+    {
         $name = $work->title ?? $work->name;
         $poster = $this->tmdbImageUrl.$work->poster_path;
         $type = $work->type == 'tv' ? "Série" : "Film";
@@ -119,6 +122,23 @@ class EsgiTmdbWidget extends WP_Widget
         foreach ($tmdbGenres as $key => $genre) {
             $this->$property[$genre->id] = $genre->name;
         }
+    }
+
+    public function esgi_generate_movie_genres_checkboxes($instance) { ?>
+        <?php foreach ($this->movieGenres as $id => $name) { ?>
+            <input class="checkbox" type="checkbox" id="<?= $this->get_field_id('genre_'.$id) ?>" name="tvGenres[]" <?php checked($instance['genre_'.$id], 'on') ?> />
+            <label for="<?= $this->get_field_id('genre_'.$id) ?>"><?= $name ?></label>
+        <?php }
+    }
+
+    public function esgi_generate_url_array($types): array
+    {
+        $urlArray = [];
+        foreach ($types as $type => $activated) {
+            if($activated)
+                $urlArray[$type] = $this->tmdbApiBaseUrl."discover/$type?api_key=".$this->tmdbKey."&language=".$this->language."&region=".$this->region."&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
+        }
+        return $urlArray;
     }
 
 }
