@@ -20,13 +20,14 @@ class EsgiTmdbWidget extends WP_Widget
     public function widget($args, $instance)
     {
         $language = str_replace("_", "-", get_locale());
+        $region = substr($language, 0, 2);
         $tmdbKey = get_option('esgi_tmdb_settings')['tmdb-key'];
 
         $types = ["movie" => (bool)$instance['movieChecked'], "tv" => (bool)$instance['tvChecked']];
         $urlArray = [];
         foreach ($types as $type => $activated) {
             if($activated)
-                $urlArray[$type] = $this->tmdbApiBaseUrl.$type."?api_key=".$tmdbKey."&language=".$language."&region=fr&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
+                $urlArray[$type] = $this->tmdbApiBaseUrl.$type."?api_key=".$tmdbKey."&language=".$language."&region=".$region."&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
         }
         $work = $this->esgi_get_random_tmdb_item($urlArray);
         $preview = $this->esgi_display_tmdb_preview($work);
