@@ -74,3 +74,16 @@ function esgi_tmdb_sanitize( $settings ){
     $settings['text'] = ! empty( $settings['text'] ) ? sanitize_text_field( $settings['text'] ) : '';
     return $settings;
 }
+
+// Shortcodes
+add_shortcode('esgi-tmdb', 'esgi_tmdb_shortcode');
+function esgi_tmdb_shortcode($attributes) {
+    $array = shortcode_atts(
+        [
+            'x' => "un truc",
+            'y' => "un autre truc",
+        ]
+        , $attributes);
+
+    return "<p> x est {$array['x']} et y est {$array['y']}</p>";
+}
