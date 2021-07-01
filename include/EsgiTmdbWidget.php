@@ -3,11 +3,14 @@
 
 class EsgiTmdbWidget extends WP_Widget
 {
-    protected string $tmdbApiBaseUrl = "https://api.themoviedb.org/3/discover/";
+    protected string $tmdbApiBaseUrl = "https://api.themoviedb.org/3/";
     protected string $tmdbImageUrl = "https://image.tmdb.org/t/p/w200";
     protected string $tmdbBaseUrl = "https://www.themoviedb.org/";
     protected string $language;
     protected string $region;
+    protected string $tmdbKey;
+    protected array $tvGenres = [];
+    protected array $movieGenres = [];
 
     public function __construct()
     {
@@ -19,6 +22,8 @@ class EsgiTmdbWidget extends WP_Widget
         $this->language = str_replace("_", "-", get_locale());
         $this->region = substr($this->language, 0, 2);
         $this->tmdbKey = get_option('esgi_tmdb_settings')['tmdb-key'];
+        $this->esgi_get_genres('tv');
+        $this->esgi_get_genres('movie');
     }
 
     // Front
@@ -28,7 +33,7 @@ class EsgiTmdbWidget extends WP_Widget
         $urlArray = [];
         foreach ($types as $type => $activated) {
             if($activated)
-                $urlArray[$type] = $this->tmdbApiBaseUrl.$type."?api_key=".$this->tmdbKey."&language=".$this->language."&region=".$this->region."&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
+                $urlArray[$type] = $this->tmdbApiBaseUrl."discover/$type?api_key=".$this->tmdbKey."&language=".$this->language."&region=".$this->region."&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
         }
         $work = $this->esgi_get_random_tmdb_item($urlArray);
         $preview = $this->esgi_display_tmdb_preview($work);
@@ -104,6 +109,16 @@ class EsgiTmdbWidget extends WP_Widget
         $preview .= "</div></a>";
 
         return $preview;
+    }
+
+    public function esgi_get_genres($type) {
+        $property = $type."Genres";
+        $tmdbGenreUrl = $this->tmdbApiBaseUrl."genre/$type/list?api_key=".$this->tmdbKey."&language=$this->language";
+        $responseBody = wp_remote_retrieve_body(wp_remote_get($tmdbGenreUrl));
+        $tmdbGenres = json_decode($responseBody)->genres;
+        foreach ($tmdbGenres as $key => $genre) {
+            $this->$property[$genre->id] = $genre->name;
+        }
     }
 
 }
