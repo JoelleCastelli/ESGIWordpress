@@ -35,6 +35,14 @@ function esgi_tmdb_config_page() {
     <?php
 }
 
+add_action('admin_enqueue_scripts', 'esgi_generate_shortcode');
+function esgi_generate_shortcode($hook) {
+    global $slug;
+    if ($hook == "toplevel_page_".$slug) {
+        wp_enqueue_script('generate_shortcode', plugin_dir_url(__FILE__) . 'script.js');
+    }
+}
+
 // Register a setting
 add_action('admin_init', 'esgi_tmdb_settings');
 function esgi_tmdb_settings(){
