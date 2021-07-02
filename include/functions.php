@@ -1,11 +1,5 @@
 <?php
 
-// TEST
-add_action('wp_footer', 'esgi_tmdb_FooterAddText');
-function esgi_tmdb_FooterAddText() {
-    echo "hello";
-}
-
 // Add menu in admin list
 add_action('admin_menu', 'esgi_tmdb_addAdminLink');
 function esgi_tmdb_addAdminLink() {
