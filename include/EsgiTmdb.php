@@ -24,21 +24,24 @@ class EsgiTmdb
     }
 
     public function esgi_get_random_tmdb_item($types){
-        $urlArray = $this->esgi_generate_url_array($types);
-        if($urlArray) {
-            $list = [];
-            foreach ($urlArray as $type => $url) {
-                $responseBody = wp_remote_retrieve_body(wp_remote_get($url));
-                $results = json_decode($responseBody)->results;
-                foreach ($results as $index => $work) {
-                    $work = (array)$work;
-                    $work['type'] = $type;
-                    $work = (object)$work;
-                    $results[$index] = $work;
+        if($this->esgi_check_types_array($types)) {
+            $urlArray = $this->esgi_generate_url_array($types);
+            if($urlArray) {
+                $list = [];
+                foreach ($urlArray as $type => $url) {
+                    $responseBody = wp_remote_retrieve_body(wp_remote_get($url));
+                    $results = json_decode($responseBody)->results;
+                    foreach ($results as $index => $work) {
+                        $work = (array)$work;
+                        $work['type'] = $type;
+                        $work = (object)$work;
+                        $results[$index] = $work;
+                    }
+                    $list = array_merge($list, $results);
                 }
-                $list = array_merge($list, $results);
+                if(!empty($list)) return $list[rand(0, count($list) - 1)];
             }
-            if(!empty($list)) return $list[rand(0, count($list) - 1)];
+            return false;
         }
         return false;
     }
@@ -77,6 +80,14 @@ class EsgiTmdb
                 $urlArray[$type] = $this->tmdbApiBaseUrl."discover/$type?api_key=".$this->tmdbKey."&language=".$this->language."&region=".$this->region."&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
         }
         return $urlArray;
+    }
+
+    public function esgi_check_types_array($types): bool
+    {
+        foreach ($types as $type => $activated) {
+            if($activated == true) return true;
+        }
+        return false;
     }
 
     public function getTvGenres(): array
