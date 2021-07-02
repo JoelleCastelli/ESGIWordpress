@@ -1,13 +1,16 @@
 <?php
 
+$slug = 'esgi-tmdb';
+
 // Add menu in admin list
 add_action('admin_menu', 'esgi_tmdb_addAdminLink');
 function esgi_tmdb_addAdminLink() {
+    global $slug;
     add_menu_page(
         'Configuration du plugin ESGI TMDB',  // Page title
         'ESGI TMDB',                         // Menu title
         'manage_options',                    // Capability
-        'esgi-tmdb',                        // Slug
+        $slug,                        // Slug
         'esgi_tmdb_config_page',             // Display callback
         'dashicons-pets'                     // Icon
     );
