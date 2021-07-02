@@ -10,3 +10,4 @@ Author URI: https://www.esgi.fr/
 
 require_once plugin_dir_path(__FILE__).'include/functions.php';
 require_once plugin_dir_path(__FILE__).'include/EsgiTmdbWidget.php';
+require_once plugin_dir_path(__FILE__).'include/EsgiTmdb.php';
