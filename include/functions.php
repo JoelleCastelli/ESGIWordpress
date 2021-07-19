@@ -35,23 +35,30 @@ function esgi_tmdb_config_page() {
             $tmdb = new EsgiTmdb();
             if($tmdb->getTmdbKey()) { ?>
                 <div class="wrap">
-                    Générer un shortcode :
-                    <form action="" method="POST">
-                        <div>
-                            Type :
-                            <input class="checkbox" type="checkbox" id="movie" name="movie" onclick='console.log(this);' />
-                            <label for="movie">Films</label>
-                            <input class="checkbox" type="checkbox" id="tv" name="tv" />
-                            <label for="tv">Séries</label>
-                        </div>
-                        <!-- <div>
-                            Genre Film :
-                            <?php foreach ($tmdb->getMovieGenres() as $id => $name) { ?>
-                                <input class="checkbox" type="checkbox" id="<?= $id ?>" name="tvGenres[]" />
-                                <label for="<?= $id ?>"><?= $name ?></label>
-                            <?php } ?>
-                        </div> -->
-                    </form>
+                    <h3>Générer un shortcode :</h3>
+                    <div>
+                        <b>Type :</b>
+                        <input class="checkbox itemType" type="checkbox" id="movie" name="movie" />
+                        <label for="movie">Films</label>
+                        <input class="checkbox itemType" type="checkbox" id="tv" name="tv" />
+                        <label for="tv">Séries</label>
+                    </div>
+                    <br>
+                    <div>
+                        <b>Genres de film : </b>
+                        <?php foreach ($tmdb->getMovieGenres() as $id => $name) { ?>
+                            <input class="checkbox movieGenre" type="checkbox" id="<?= $id ?>" />
+                            <label for="<?= $id ?>"><?= $name ?></label>
+                        <?php } ?>
+                    </div>
+                    <br>
+                    <div>
+                        <b>Genres de séries : </b>
+                        <?php foreach ($tmdb->getTvGenres() as $id => $name) { ?>
+                            <input class="checkbox tvGenre" type="checkbox" id="<?= $id ?>" />
+                            <label for="<?= $id ?>"><?= $name ?></label>
+                        <?php } ?>
+                    </div>
                     <div id="shortcode"></div>
                 </div>
                 <?php
