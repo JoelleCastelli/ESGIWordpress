@@ -39,25 +39,25 @@ class EsgiTmdbWidget extends WP_Widget
         // Title
         $title = $instance['title'] ?? '';
         echo '<p>
-                  <label for="'.$this->get_field_name('title').'"><b>Titre du widget&nbsp;:</b></label>
-                  <input class="widefat" id="'.$this->get_field_name('title').'" name="'.$this->get_field_name('title').'" type="text" value="'.$title.'">
-              </p>';?>
+                  <label for="' . $this->get_field_name('title') . '"><b>Titre du widget&nbsp;:</b></label>
+                  <input class="widefat" id="' . $this->get_field_name('title') . '" name="' . $this->get_field_name('title') . '" type="text" value="' . $title . '">
+              </p>'; ?>
 
         <!--Media selection (Movie and/or TV shows)-->
         <p>
             <b>Média :</b><br>
-            <input class="checkbox" type="checkbox" <?php checked( $instance['movieChecked'], 'on' ); ?> id="<?= $this->get_field_id('movieChecked'); ?>" name="<?= $this->get_field_name('movieChecked'); ?>" />
+            <input class="checkbox" type="checkbox" <?php checked($instance['movieChecked'], 'on'); ?> id="<?= $this->get_field_id('movieChecked'); ?>" name="<?= $this->get_field_name('movieChecked'); ?>" />
             <label for="<?= $this->get_field_id('movieChecked'); ?>">Films</label>
-            <input class="checkbox" type="checkbox" <?php checked( $instance['tvChecked'], 'on' ); ?> id="<?= $this->get_field_id('tvChecked'); ?>" name="<?= $this->get_field_name('tvChecked'); ?>" />
+            <input class="checkbox" type="checkbox" <?php checked($instance['tvChecked'], 'on'); ?> id="<?= $this->get_field_id('tvChecked'); ?>" name="<?= $this->get_field_name('tvChecked'); ?>" />
             <label for="<?= $this->get_field_id('tvChecked'); ?>">Séries</label>
         </p>
 
         <!--Movie genre selection-->
         <p>
             <b>Genres de Films :</b><br>
-            <?php $this->esgi_generate_genres_checkboxes($instance, 'movie');?>
+            <?php $this->esgi_generate_genres_checkboxes($instance, 'movie'); ?>
             <br><br><b>Genres de Séries :</b><br>
-            <?php $this->esgi_generate_genres_checkboxes($instance, 'tv');?>
+            <?php $this->esgi_generate_genres_checkboxes($instance, 'tv'); ?>
         </p>
     <?php }
 
@@ -72,12 +72,12 @@ class EsgiTmdbWidget extends WP_Widget
         return $instance;
     }
 
-    public function esgi_generate_genres_checkboxes($instance, $type) { ?>
+    public function esgi_generate_genres_checkboxes($instance, $type)
+    { ?>
         <?php $genres = $type === "movie" ? $this->tmdb->getMovieGenres() : $this->tmdb->getTvGenres();
         foreach ($genres as $id => $name) { ?>
-            <input class="checkbox" type="checkbox" id="<?= $this->get_field_id($type.'_genre_'.$id) ?>" name="<?= $type ?>Genres[]" <?php checked($instance[$type.'_genre_'.$id], 'on') ?> />
-            <label for="<?= $this->get_field_id($type.'_genre_'.$id) ?>"><?= $name ?></label>
-        <?php }
+            <input class="checkbox" type="checkbox" id="<?= $this->get_field_id($id) ?>" name="<?= $type ?>Genres[]" <?php checked($instance[$id], 'on') ?> />
+            <label for="<?= $this->get_field_id($id) ?>"><?= $name ?></label>
+    <?php }
     }
-
 }
