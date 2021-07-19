@@ -50,8 +50,8 @@ class EsgiTmdb
             $urlArray = $this->esgi_generate_url_array($types);
             if($urlArray) {
                 $list = [];
-                foreach ($urlArray as $type) {
-                    foreach ($type as $page => $url) {
+                foreach ($urlArray as $type => $urls) {
+                    foreach ($urls as $page => $url) {
                         $responseBody = wp_remote_retrieve_body(wp_remote_get($url));
                         $results = json_decode($responseBody)->results;
                         foreach ($results as $index => $work) {
@@ -75,7 +75,7 @@ class EsgiTmdb
         $name = $work->title ?? $work->name;
         $poster = $this->tmdbImageUrl.$work->poster_path;
         $type = $work->type == 'tv' ? "Série" : "Film";
-        $url = $this->tmdbBaseUrl.$type.'/'.$work->id;
+        $url = $this->tmdbBaseUrl.$work->type.'/'.$work->id;
 
         $preview = "<a href='$url' target='_blank'><div class='esgi_tmdb_preview'>";
         $preview .= "<div class='esgi_tmdb_preview_poster'><img src='$poster'/></div>";
