@@ -123,20 +123,24 @@ function esgi_tmdb_widgets(){
 
 // Shortcodes
 add_shortcode('esgi-tmdb', 'esgi_tmdb_shortcode');
-function esgi_tmdb_shortcode($attributes) {
+function esgi_tmdb_shortcode($attributes)
+{
     $genres = [];
     foreach ($attributes as $type => $genresId) {
-        if($genresId === "") {
+        if ($genresId === "none") {
             $types[$type] = false;
         } else {
             $types[$type] = true;
-            $genres[$type] = $genresId;
+            if ($genresId !== "all")
+                $genres[$type] = $genresId;
         }
     }
-    if(empty($genres)) $genres = null;
+    if (empty($genres)) $genres = null;
 
     $tmdb = new EsgiTmdb();
     $tmdbRandomWork = $tmdb->esgi_get_random_tmdb_item(['movie' => $types['movie'], 'tv' => $types['tv']], $genres);
-    if($tmdbRandomWork)
-        return "<p>".$tmdb->esgi_get_tmdb_preview($tmdbRandomWork)."</p>";
+    if ($tmdbRandomWork)
+        return "<p>" . $tmdb->esgi_get_tmdb_preview($tmdbRandomWork) . "</p>";
+
+    return false;
 }
