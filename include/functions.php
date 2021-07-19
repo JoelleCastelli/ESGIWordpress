@@ -44,13 +44,13 @@ function esgi_tmdb_config_page() {
                             <input class="checkbox" type="checkbox" id="tv" name="tv" />
                             <label for="tv">Séries</label>
                         </div>
-                        <div>
+                        <!-- <div>
                             Genre Film :
                             <?php foreach ($tmdb->getMovieGenres() as $id => $name) { ?>
                                 <input class="checkbox" type="checkbox" id="<?= $id ?>" name="tvGenres[]" />
                                 <label for="<?= $id ?>"><?= $name ?></label>
                             <?php } ?>
-                        </div>
+                        </div> -->
                     </form>
                     <div id="shortcode"></div>
                 </div>
