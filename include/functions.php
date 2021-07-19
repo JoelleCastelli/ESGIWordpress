@@ -117,17 +117,9 @@ function esgi_tmdb_widgets(){
 // Shortcodes
 add_shortcode('esgi-tmdb', 'esgi_tmdb_shortcode');
 function esgi_tmdb_shortcode($attributes) {
+    $movie = !(strpos($attributes['types'], 'movie') === false);
+    $tv = !(strpos($attributes['types'], 'tv') === false);
     $tmdb = new EsgiTmdb();
-    $tmdbRandomWork = $tmdb->esgi_get_random_tmdb_item(['movie' => true, 'tv' => false]);
+    $tmdbRandomWork = $tmdb->esgi_get_random_tmdb_item(['movie' => $movie, 'tv' => $tv]);
     return "<p>".$tmdb->esgi_get_tmdb_preview($tmdbRandomWork)."</p>";
-
-    /*$array = shortcode_atts(
-        [
-            'types' => ["movie", "tv"],
-            'genres' => ["genre1", "genre2"],
-        ]
-        , $attributes);
-
-    return "<p> x est {$array['types']} et y est {$array['genres']}</p>";
-    return "<p> types est {$array['types']}</p>";*/
 }
