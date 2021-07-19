@@ -117,9 +117,19 @@ function esgi_tmdb_widgets(){
 // Shortcodes
 add_shortcode('esgi-tmdb', 'esgi_tmdb_shortcode');
 function esgi_tmdb_shortcode($attributes) {
-    $movie = !(strpos($attributes['types'], 'movie') === false);
-    $tv = !(strpos($attributes['types'], 'tv') === false);
+    $genres = [];
+    foreach ($attributes as $type => $genresId) {
+        if($genresId === "") {
+            $types[$type] = false;
+        } else {
+            $types[$type] = true;
+            $genres[$type] = $genresId;
+        }
+    }
+    if(empty($genres)) $genres = null;
+
     $tmdb = new EsgiTmdb();
-    $tmdbRandomWork = $tmdb->esgi_get_random_tmdb_item(['movie' => $movie, 'tv' => $tv]);
-    return "<p>".$tmdb->esgi_get_tmdb_preview($tmdbRandomWork)."</p>";
+    $tmdbRandomWork = $tmdb->esgi_get_random_tmdb_item(['movie' => $types['movie'], 'tv' => $types['tv']], $genres);
+    if($tmdbRandomWork)
+        return "<p>".$tmdb->esgi_get_tmdb_preview($tmdbRandomWork)."</p>";
 }

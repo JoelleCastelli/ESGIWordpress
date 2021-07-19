@@ -45,8 +45,8 @@ class EsgiTmdb
         $this->tmdbKey = $tmdbKey;
     }
 
-    public function esgi_get_random_tmdb_item($types){
-        $urlArray = $this->esgi_generate_url_array($types);
+    public function esgi_get_random_tmdb_item($types, $genres = null){
+        $urlArray = $this->esgi_generate_url_array($types, $genres);
         if($urlArray) {
             $list = [];
             foreach ($urlArray as $type => $urls) {
@@ -94,14 +94,18 @@ class EsgiTmdb
         }
     }
 
-    public function esgi_generate_url_array($types): array
+    public function esgi_generate_url_array($types, $genres = null): array
     {
         $urlArray = [];
         foreach ($types as $type => $activated) {
             if($activated) {
                 // Get first 5 pages of TMDB results (100 results)
+                $genresId = '';
+                if($genres && $genres[$type])
+                    $genresId = "&with_genres=$genres[$type]";
+
                 for ($i = 1 ; $i <= 5 ; $i++) {
-                    $urlArray[$type][$i] = $this->tmdbApiBaseUrl."discover/$type?api_key=".$this->tmdbKey."&language=".$this->language."&region=".$this->region."&sort_by=popularity.desc&include_adult=false&include_video=false&page=$i";
+                    $urlArray[$type][$i] = $this->tmdbApiBaseUrl."discover/$type?api_key=".$this->tmdbKey."&language=".$this->language."&region=".$this->region."&sort_by=popularity.desc$genresId&include_adult=false&include_video=false&page=$i";
                 }
             }
         }
