@@ -76,7 +76,10 @@ class EsgiTmdbWidget extends WP_Widget
     { ?>
         <?php $genres = $type === "movie" ? $this->tmdb->getMovieGenres() : $this->tmdb->getTvGenres();
         foreach ($genres as $id => $name) { ?>
-            <input class="checkbox" type="checkbox" id="<?= $this->get_field_id($id) ?>" name="<?= $type ?>Genres[]" <?php checked($instance[$id], 'on') ?> />
+            <input class="checkbox" type="checkbox"
+                   id="<?= $this->get_field_id($id) ?>"
+                   value="<?php echo $name; ?>"
+                   name="<?= $type ?>Genres[]" <?php checked($instance[$id], 'on') ?> />
             <label for="<?= $this->get_field_id($id) ?>"><?= $name ?></label>
     <?php }
     }
