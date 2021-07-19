@@ -9,7 +9,7 @@ class EsgiTmdb
     protected string $tmdbBaseUrl = "https://www.themoviedb.org/";
     protected string $language;
     protected string $region;
-    protected string $tmdbKey;
+    protected ?string $tmdbKey = null;
     protected array $tvGenres = [];
     protected array $movieGenres = [];
 
@@ -18,9 +18,11 @@ class EsgiTmdb
     {
         $this->language = str_replace("_", "-", get_locale());
         $this->region = substr($this->language, 0, 2);
-        $this->tmdbKey = get_option('esgi_tmdb_settings')['tmdb-key'];
-        $this->esgi_get_genres('tv');
-        $this->esgi_get_genres('movie');
+        $this->tmdbKey = get_option('esgi_tmdb_settings')['tmdb-key'] ?? '';
+        if($this->tmdbKey) {
+            $this->esgi_get_genres('tv');
+            $this->esgi_get_genres('movie');
+        }
     }
 
     public function esgi_get_random_tmdb_item($types){
@@ -98,6 +100,22 @@ class EsgiTmdb
     public function getMovieGenres(): array
     {
         return $this->movieGenres;
+    }
+
+    /**
+     * @return mixed|string|null
+     */
+    public function getTmdbKey()
+    {
+        return $this->tmdbKey;
+    }
+
+    /**
+     * @param mixed|string|null $tmdbKey
+     */
+    public function setTmdbKey($tmdbKey): void
+    {
+        $this->tmdbKey = $tmdbKey;
     }
 
 }
