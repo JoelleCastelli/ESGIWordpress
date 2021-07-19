@@ -31,6 +31,30 @@ function esgi_tmdb_config_page() {
                 ?>
             </form>
         </div>
+        <div class="wrap">
+            Générer un shortcode :
+            <form action="" method="POST">
+                <div>
+                    Type :
+                    <input class="checkbox" type="checkbox" id="movie" name="movie" onclick='console.log(this);' />
+                    <label for="movie">Films</label>
+                    <input class="checkbox" type="checkbox" id="tv" name="tv" />
+                    <label for="tv">Séries</label>
+                </div>
+
+                <div>
+                    Genre Film :
+                    <?php
+                    $tmdb = new EsgiTmdb();
+                    foreach ($tmdb->getMovieGenres() as $id => $name) { ?>
+                        <input class="checkbox" type="checkbox" id="<?= $id ?>" name="tvGenres[]" />
+                        <label for="<?= $id ?>"><?= $name ?></label>
+                    <?php } ?>
+                </div>
+
+            </form>
+            <div id="shortcode"></div>
+        </div>
     </div>
     <?php
 }
@@ -91,12 +115,16 @@ function esgi_tmdb_widgets(){
 // Shortcodes
 add_shortcode('esgi-tmdb', 'esgi_tmdb_shortcode');
 function esgi_tmdb_shortcode($attributes) {
+    $tmdb = new EsgiTmdb();
+    /*$tmdbRandomWork = $tmdb->esgi_get_random_tmdb_item(["Action"]);
+    $tmdbRandomWorkPreview = $tmdb->esgi_get_tmdb_preview($tmdbRandomWork);*/
+
     $array = shortcode_atts(
         [
-            'x' => "un truc",
+            'types' => ["movie", "tv"],
             'y' => "un autre truc",
         ]
         , $attributes);
 
-    return "<p> x est {$array['x']} et y est {$array['y']}</p>";
+    return "<p> x est {$array['types']} et y est {$array['y']}</p>";
 }
