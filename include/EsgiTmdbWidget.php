@@ -56,12 +56,12 @@ class EsgiTmdbWidget extends WP_Widget
             </p>
 
             <!--Movie genre selection-->
-            <p>
+            <!-- <p>
                 <b>Genres de Films :</b><br>
                 <?php $this->esgi_generate_genres_checkboxes($instance, 'movie'); ?>
                 <br><br><b>Genres de Séries :</b><br>
                 <?php $this->esgi_generate_genres_checkboxes($instance, 'tv'); ?>
-            </p>
+            </p> -->
 
         <?php } else {
             echo "<p>Rendez-vous sur <a href='".admin_url('/admin.php?page=esgi-tmdb')."'>la page d'administration du plugin ESGI TMDB</a> pour ajouter votre clé API TMDB</p>";
