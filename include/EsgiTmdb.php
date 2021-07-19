@@ -25,21 +25,43 @@ class EsgiTmdb
         }
     }
 
+    public function getTvGenres(): array
+    {
+        return $this->tvGenres;
+    }
+
+    public function getMovieGenres(): array
+    {
+        return $this->movieGenres;
+    }
+
+    public function getTmdbKey()
+    {
+        return $this->tmdbKey;
+    }
+
+    public function setTmdbKey($tmdbKey): void
+    {
+        $this->tmdbKey = $tmdbKey;
+    }
+
     public function esgi_get_random_tmdb_item($types){
         if($this->esgi_check_types_array($types)) {
             $urlArray = $this->esgi_generate_url_array($types);
             if($urlArray) {
                 $list = [];
-                foreach ($urlArray as $type => $url) {
-                    $responseBody = wp_remote_retrieve_body(wp_remote_get($url));
-                    $results = json_decode($responseBody)->results;
-                    foreach ($results as $index => $work) {
-                        $work = (array)$work;
-                        $work['type'] = $type;
-                        $work = (object)$work;
-                        $results[$index] = $work;
+                foreach ($urlArray as $type) {
+                    foreach ($type as $page => $url) {
+                        $responseBody = wp_remote_retrieve_body(wp_remote_get($url));
+                        $results = json_decode($responseBody)->results;
+                        foreach ($results as $index => $work) {
+                            $work = (array)$work;
+                            $work['type'] = $type;
+                            $work = (object)$work;
+                            $results[$index] = $work;
+                        }
+                        $list = array_merge($list, $results);
                     }
-                    $list = array_merge($list, $results);
                 }
                 if(!empty($list)) return $list[rand(0, count($list) - 1)];
             }
@@ -78,8 +100,12 @@ class EsgiTmdb
     {
         $urlArray = [];
         foreach ($types as $type => $activated) {
-            if($activated)
-                $urlArray[$type] = $this->tmdbApiBaseUrl."discover/$type?api_key=".$this->tmdbKey."&language=".$this->language."&region=".$this->region."&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
+            if($activated) {
+                // Get first 5 pages of TMDB results (100 results)
+                for ($i = 1 ; $i <= 5 ; $i++) {
+                    $urlArray[$type][$i] = $this->tmdbApiBaseUrl."discover/$type?api_key=".$this->tmdbKey."&language=".$this->language."&region=".$this->region."&sort_by=popularity.desc&include_adult=false&include_video=false&page=$i";
+                }
+            }
         }
         return $urlArray;
     }
@@ -90,32 +116,6 @@ class EsgiTmdb
             if($activated == true) return true;
         }
         return false;
-    }
-
-    public function getTvGenres(): array
-    {
-        return $this->tvGenres;
-    }
-
-    public function getMovieGenres(): array
-    {
-        return $this->movieGenres;
-    }
-
-    /**
-     * @return mixed|string|null
-     */
-    public function getTmdbKey()
-    {
-        return $this->tmdbKey;
-    }
-
-    /**
-     * @param mixed|string|null $tmdbKey
-     */
-    public function setTmdbKey($tmdbKey): void
-    {
-        $this->tmdbKey = $tmdbKey;
     }
 
 }
