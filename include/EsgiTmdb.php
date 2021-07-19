@@ -76,11 +76,12 @@ class EsgiTmdb
         $poster = $this->tmdbImageUrl.$work->poster_path;
         $type = $work->type == 'tv' ? "Série" : "Film";
         $url = $this->tmdbBaseUrl.$work->type.'/'.$work->id;
+        $date = date("Y", strtotime($work->release_date ?? $work->first_air_date));
 
         $preview = "<a href='$url' target='_blank'><div class='esgi_tmdb_preview'>";
         $preview .= "<div class='esgi_tmdb_preview_poster'><img src='$poster'/></div>";
         $preview .= "<div class='esgi_tmdb_preview_name'>$name</div>";
-        $preview .= "<div class='esgi_tmdb_preview_type'>$type</div>";
+        $preview .= "<div class='esgi_tmdb_preview_type'>$type ($date)</div>";
         $preview .= "</div></a>";
 
         return $preview;
@@ -118,4 +119,5 @@ class EsgiTmdb
         return false;
     }
 
+    
 }
