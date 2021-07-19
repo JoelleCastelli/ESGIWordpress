@@ -36,7 +36,7 @@ function esgi_tmdb_config_page() {
             if($tmdb->getTmdbKey()) { ?>
                 <div class="wrap">
                     <h3>Générer un shortcode :</h3>
-                    <div>
+                    <div id="itemType">
                         <b>Type :</b>
                         <input class="checkbox itemType" type="checkbox" id="movie" name="movie" />
                         <label for="movie">Films</label>
@@ -44,18 +44,18 @@ function esgi_tmdb_config_page() {
                         <label for="tv">Séries</label>
                     </div>
                     <br>
-                    <div>
-                        <b>Genres de film : </b>
+                    <div id="movieGenres">
+                        <b>Genres de films : </b>
                         <?php foreach ($tmdb->getMovieGenres() as $id => $name) { ?>
-                            <input class="checkbox movieGenre" type="checkbox" id="<?= $id ?>" />
+                            <input class="checkbox movieGenres" type="checkbox" id="<?= $id ?>" />
                             <label for="<?= $id ?>"><?= $name ?></label>
                         <?php } ?>
                     </div>
                     <br>
-                    <div>
+                    <div id="tvGenres">
                         <b>Genres de séries : </b>
                         <?php foreach ($tmdb->getTvGenres() as $id => $name) { ?>
-                            <input class="checkbox tvGenre" type="checkbox" id="<?= $id ?>" />
+                            <input class="checkbox tvGenres" type="checkbox" id="<?= $id ?>" />
                             <label for="<?= $id ?>"><?= $name ?></label>
                         <?php } ?>
                     </div>

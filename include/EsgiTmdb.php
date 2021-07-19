@@ -90,7 +90,7 @@ class EsgiTmdb
         $responseBody = wp_remote_retrieve_body(wp_remote_get($tmdbGenreUrl));
         $tmdbGenres = json_decode($responseBody)->genres;
         foreach ($tmdbGenres as $key => $genre) {
-            $this->$property[$type.'_genre_'.$genre->id] = $genre->name;
+            $this->$property[$genre->id] = $genre->name;
         }
     }
 
