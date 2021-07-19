@@ -22,16 +22,19 @@ class EsgiTmdbWidget extends WP_Widget
         extract($args);
         if ($this->tmdb->getTmdbKey()) {
             $types = ["movie" => (bool)$instance['movieChecked'], "tv" => (bool)$instance['tvChecked']];
-            $tmdbRandomWork = $this->tmdb->esgi_get_random_tmdb_item($types);
-            if ($tmdbRandomWork) {
-                $tmdbRandomWorkPreview = $this->tmdb->esgi_get_tmdb_preview($tmdbRandomWork);
-                $title = apply_filters('widget_title', $instance['title']);
-                echo $before_widget . $before_title;
-                echo $title;
-                echo $after_title;
-                echo $tmdbRandomWorkPreview;
-                echo $after_widget;
+            if($this->tmdb->esgi_check_types_array($types)) {
+                $tmdbRandomWork = $this->tmdb->esgi_get_random_tmdb_item($types);
+                if ($tmdbRandomWork) {
+                    $tmdbRandomWorkPreview = $this->tmdb->esgi_get_tmdb_preview($tmdbRandomWork);
+                    $title = apply_filters('widget_title', $instance['title']);
+                    echo $before_widget . $before_title;
+                    echo $title;
+                    echo $after_title;
+                    echo $tmdbRandomWorkPreview;
+                    echo $after_widget;
+                }
             }
+
         }
     }
 

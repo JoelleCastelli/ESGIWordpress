@@ -46,26 +46,23 @@ class EsgiTmdb
     }
 
     public function esgi_get_random_tmdb_item($types){
-        if($this->esgi_check_types_array($types)) {
-            $urlArray = $this->esgi_generate_url_array($types);
-            if($urlArray) {
-                $list = [];
-                foreach ($urlArray as $type => $urls) {
-                    foreach ($urls as $page => $url) {
-                        $responseBody = wp_remote_retrieve_body(wp_remote_get($url));
-                        $results = json_decode($responseBody)->results;
-                        foreach ($results as $index => $work) {
-                            $work = (array)$work;
-                            $work['type'] = $type;
-                            $work = (object)$work;
-                            $results[$index] = $work;
-                        }
-                        $list = array_merge($list, $results);
+        $urlArray = $this->esgi_generate_url_array($types);
+        if($urlArray) {
+            $list = [];
+            foreach ($urlArray as $type => $urls) {
+                foreach ($urls as $page => $url) {
+                    $responseBody = wp_remote_retrieve_body(wp_remote_get($url));
+                    $results = json_decode($responseBody)->results;
+                    foreach ($results as $index => $work) {
+                        $work = (array)$work;
+                        $work['type'] = $type;
+                        $work = (object)$work;
+                        $results[$index] = $work;
                     }
+                    $list = array_merge($list, $results);
                 }
-                if(!empty($list)) return $list[rand(0, count($list) - 1)];
             }
-            return false;
+            if(!empty($list)) return $list[rand(0, count($list) - 1)];
         }
         return false;
     }
@@ -111,6 +108,7 @@ class EsgiTmdb
         return $urlArray;
     }
 
+    // Check if at least one type (tv or movie) is checked
     public function esgi_check_types_array($types): bool
     {
         foreach ($types as $type => $activated) {
