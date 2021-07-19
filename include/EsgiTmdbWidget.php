@@ -36,30 +36,35 @@ class EsgiTmdbWidget extends WP_Widget
     // Back
     public function form($instance)
     {
-        // Title
-        $title = $instance['title'] ?? '';
-        echo '<p>
+        if($this->tmdb->getTmdbKey()) {
+            // Title
+            $title = $instance['title'] ?? '';
+            echo '<p>
                   <label for="' . $this->get_field_name('title') . '"><b>Titre du widget&nbsp;:</b></label>
                   <input class="widefat" id="' . $this->get_field_name('title') . '" name="' . $this->get_field_name('title') . '" type="text" value="' . $title . '">
               </p>'; ?>
 
-        <!--Media selection (Movie and/or TV shows)-->
-        <p>
-            <b>Média :</b><br>
-            <input class="checkbox" type="checkbox" <?php checked($instance['movieChecked'], 'on'); ?> id="<?= $this->get_field_id('movieChecked'); ?>" name="<?= $this->get_field_name('movieChecked'); ?>" />
-            <label for="<?= $this->get_field_id('movieChecked'); ?>">Films</label>
-            <input class="checkbox" type="checkbox" <?php checked($instance['tvChecked'], 'on'); ?> id="<?= $this->get_field_id('tvChecked'); ?>" name="<?= $this->get_field_name('tvChecked'); ?>" />
-            <label for="<?= $this->get_field_id('tvChecked'); ?>">Séries</label>
-        </p>
+            <!--Media selection (Movie and/or TV shows)-->
+            <p>
+                <b>Média :</b><br>
+                <input class="checkbox" type="checkbox" <?php checked($instance['movieChecked'], 'on'); ?> id="<?= $this->get_field_id('movieChecked'); ?>" name="<?= $this->get_field_name('movieChecked'); ?>" />
+                <label for="<?= $this->get_field_id('movieChecked'); ?>">Films</label>
+                <input class="checkbox" type="checkbox" <?php checked($instance['tvChecked'], 'on'); ?> id="<?= $this->get_field_id('tvChecked'); ?>" name="<?= $this->get_field_name('tvChecked'); ?>" />
+                <label for="<?= $this->get_field_id('tvChecked'); ?>">Séries</label>
+            </p>
 
-        <!--Movie genre selection-->
-        <p>
-            <b>Genres de Films :</b><br>
-            <?php $this->esgi_generate_genres_checkboxes($instance, 'movie'); ?>
-            <br><br><b>Genres de Séries :</b><br>
-            <?php $this->esgi_generate_genres_checkboxes($instance, 'tv'); ?>
-        </p>
-    <?php }
+            <!--Movie genre selection-->
+            <p>
+                <b>Genres de Films :</b><br>
+                <?php $this->esgi_generate_genres_checkboxes($instance, 'movie'); ?>
+                <br><br><b>Genres de Séries :</b><br>
+                <?php $this->esgi_generate_genres_checkboxes($instance, 'tv'); ?>
+            </p>
+
+        <?php } else {
+            echo "<p>Rendez-vous sur <a href='".admin_url('/admin.php?page=esgi-tmdb')."'>la page d'administration du plugin ESGI TMDB</a> pour ajouter votre clé API TMDB</p>";
+        }
+    }
 
     public function update($new_instance, $old_instance): array
     {
