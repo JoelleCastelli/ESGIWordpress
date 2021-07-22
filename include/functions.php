@@ -47,7 +47,7 @@ function esgi_tmdb_config_page() {
                     <div id="movieGenres">
                         <b>Genres de films : </b>
                         <?php foreach ($tmdb->getMovieGenres() as $id => $name) { ?>
-                            <input class="checkbox movieGenres" type="checkbox" id="<?= $id ?>" />
+                            <input disabled class="checkbox movieGenres" type="checkbox" id="<?= $id ?>" />
                             <label for="<?= $id ?>"><?= $name ?></label>
                         <?php } ?>
                     </div>
@@ -55,11 +55,16 @@ function esgi_tmdb_config_page() {
                     <div id="tvGenres">
                         <b>Genres de séries : </b>
                         <?php foreach ($tmdb->getTvGenres() as $id => $name) { ?>
-                            <input class="checkbox tvGenres" type="checkbox" id="<?= $id ?>" />
+                            <input disabled class="checkbox tvGenres" type="checkbox" id="<?= $id ?>" />
                             <label for="<?= $id ?>"><?= $name ?></label>
                         <?php } ?>
                     </div>
-                    <div id="shortcode"></div>
+                    <h3 id="shortcode-container">
+                        <p>
+                            <div id="shortcode"></div>
+                        </p>
+                    </h3>
+
                 </div>
                 <?php
             }

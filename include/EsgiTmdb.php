@@ -101,7 +101,7 @@ class EsgiTmdb
             if($activated) {
                 // Get first 5 pages of TMDB results (100 results)
                 $genresId = '';
-                if($genres && $genres[$type])
+                if($genres && isset($genres[$type]))
                     $genresId = "&with_genres=$genres[$type]";
 
                 for ($i = 1 ; $i <= 5 ; $i++) {
