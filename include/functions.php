@@ -43,7 +43,12 @@ function esgi_tmdb_config_page() {
                         <input class="checkbox itemType" type="checkbox" id="tv" name="tv" />
                         <label for="tv">Séries</label>
                     </div>
-                    <br>
+                    <p>
+                        ⚠ <span style="color: red; font-weight: bold">Attention</span> ⚠<br>
+                        Les genres ne sont pas séparés mais <b>cumulés</b> : si, pour les films, vous sélectionnez les genres "Comédie" et "Horreur",
+                        votre page affichera les films qui correspondent <b>au moins </b> à ces deux genres, en l'occurrence des comédies d'horreur.
+                        Attention à ne pas sélectionner trop de genres sous peine de ne trouver aucun résultat.
+                    </p>
                     <div id="movieGenres">
                         <b>Genres de films : </b>
                         <?php foreach ($tmdb->getMovieGenres() as $id => $name) { ?>
