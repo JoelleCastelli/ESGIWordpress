@@ -68,29 +68,13 @@ class EsgiTmdbWidget extends WP_Widget
              <!--Movie genre selection-->
              <p>
                 <b>Genres de Films :</b><br>
-                 <?php
-                    foreach ($this->tmdb->getMovieGenres() as $id => $name) { ?>
-                        <input class="checkbox movieGenres" type="checkbox"
-                            <?php if(isset($instance['movie-'.$id])) checked($instance['movie-'.$id], 'on'); ?>
-                               id="<?= $this->get_field_id('movie-'.$id); ?>"
-                               name="<?= $this->get_field_name('movie-'.$id); ?>" disabled />
-                        <label for="<?= $this->get_field_id('movie-'.$id); ?>"><?= $name ?></label>
-                    <?php }
-                 ?>
+                 <?php $this->esgi_generate_genres_checkboxes($instance, 'movie') ?>
              </p>
 
             <!--TV genre selection-->
             <p>
                 <b>Genres de Séries :</b><br>
-                <?php
-                foreach ($this->tmdb->getTvGenres() as $id => $name) { ?>
-                    <input class="checkbox tvGenres" type="checkbox"
-                        <?php if(isset($instance['tv-'.$id])) checked($instance['tv-'.$id], 'on'); ?>
-                           id="<?= $this->get_field_id('tv-'.$id); ?>"
-                           name="<?= $this->get_field_name('tv-'.$id); ?>" disabled />
-                    <label for="<?= $this->get_field_id('tv-'.$id); ?>"><?= $name ?></label>
-                <?php }
-                ?>
+                <?php $this->esgi_generate_genres_checkboxes($instance, 'tv') ?>
             </p>
         <?php } else {
             echo "<p>Rendez-vous sur <a href='".admin_url('/admin.php?page=esgi-tmdb')."'>la page d'administration du plugin ESGI TMDB</a> pour ajouter votre clé API TMDB</p>";
@@ -136,11 +120,11 @@ class EsgiTmdbWidget extends WP_Widget
     { ?>
         <?php $genres = $type === "movie" ? $this->tmdb->getMovieGenres() : $this->tmdb->getTvGenres();
         foreach ($genres as $id => $name) { ?>
-            <input class="checkbox" type="checkbox"
-                   id="<?= $this->get_field_id($id) ?>"
-                   value="<?php echo $name; ?>"
-                   name="<?= $type ?>Genres[]" <?php checked($instance[$id], 'on') ?> />
-            <label for="<?= $this->get_field_id($id) ?>"><?= $name ?></label>
+            <input class="checkbox tvGenres" type="checkbox"
+                <?php if(isset($instance[$type.'-'.$id])) checked($instance[$type.'-'.$id], 'on'); ?>
+                   id="<?= $this->get_field_id($type.'-'.$id); ?>"
+                   name="<?= $this->get_field_name($type.'-'.$id); ?>" disabled />
+            <label for="<?= $this->get_field_id($type.'-'.$id); ?>"><?= $name ?></label>
         <?php }
     }
 }
