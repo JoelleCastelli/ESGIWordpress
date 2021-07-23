@@ -51,9 +51,9 @@ class EsgiTmdbWidget extends WP_Widget
             <!--Media selection (Movie and/or TV shows)-->
             <p>
                 <b>Média :</b><br>
-                <input class="checkbox" type="checkbox" <?php checked($instance['movieChecked'], 'on'); ?> id="<?= $this->get_field_id('movieChecked'); ?>" name="<?= $this->get_field_name('movieChecked'); ?>" />
+                <input class="checkbox" type="checkbox" <?php if(isset($instance['movieChecked'])) checked($instance['movieChecked'], 'on'); ?> id="<?= $this->get_field_id('movieChecked'); ?>" name="<?= $this->get_field_name('movieChecked'); ?>" />
                 <label for="<?= $this->get_field_id('movieChecked'); ?>">Films</label>
-                <input class="checkbox" type="checkbox" <?php checked($instance['tvChecked'], 'on'); ?> id="<?= $this->get_field_id('tvChecked'); ?>" name="<?= $this->get_field_name('tvChecked'); ?>" />
+                <input class="checkbox" type="checkbox" <?php if(isset($instance['tvChecked'])) checked($instance['tvChecked'], 'on'); ?> id="<?= $this->get_field_id('tvChecked'); ?>" name="<?= $this->get_field_name('tvChecked'); ?>" />
                 <label for="<?= $this->get_field_id('tvChecked'); ?>">Séries</label>
             </p>
 
