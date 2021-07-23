@@ -131,6 +131,22 @@ function esgi_tmdb_widgets(){
     register_widget('EsgiTmdbWidget');
 }
 
+// Add admin notice on plugin activation
+function tmdb_key_admin_notice() {
+    global $pagenow;
+    $tmdb = new EsgiTmdb();
+    if ($pagenow == 'plugins.php' && $tmdb->getTmdbKey() == '') { ?>
+        <div class="notice notice-info is-dismissible">
+            <p>
+                Le plugin <?= get_plugin_data(plugin_dir_path(__FILE__) . '../esgi-tmdb.php')['Name'] ?> est activé !
+                Pour l'utiliser, rendez-vous sur <a href="<?= admin_url('/admin.php?page=esgi-tmdb') ?>">la page d'administration
+                du plugin</a> pour ajouter votre clé TMDB.
+            </p>
+        </div>
+<?php }
+}
+add_action('admin_notices', 'tmdb_key_admin_notice');
+
 // Shortcodes
 add_shortcode('esgi-tmdb', 'esgi_tmdb_shortcode');
 function esgi_tmdb_shortcode($attributes)
