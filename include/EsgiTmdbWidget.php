@@ -34,7 +34,6 @@ class EsgiTmdbWidget extends WP_Widget
                     echo $after_widget;
                 }
             }
-
         }
     }
 
@@ -61,9 +60,9 @@ class EsgiTmdbWidget extends WP_Widget
             <!--Movie genre selection-->
             <!-- <p>
                 <b>Genres de Films :</b><br>
-                <?php $this->esgi_generate_genres_checkboxes($instance, 'movie'); ?>
+                <?php /*$this->esgi_generate_genres_checkboxes($instance, 'movie'); */?>
                 <br><br><b>Genres de Séries :</b><br>
-                <?php $this->esgi_generate_genres_checkboxes($instance, 'tv'); ?>
+                <?php /*$this->esgi_generate_genres_checkboxes($instance, 'tv'); */?>
             </p> -->
 
         <?php } else {
@@ -75,9 +74,9 @@ class EsgiTmdbWidget extends WP_Widget
     {
         $instance = [];
         $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
-        $instance['movieChecked'] = $new_instance['movieChecked'];
+        $instance['movieChecked'] = isset($new_instance['movieChecked']) ? $new_instance['movieChecked'] : '';
+        $instance['tvChecked'] = isset($new_instance['tvChecked']) ? $new_instance['tvChecked'] : '';
         $instance['movieGenres'][] = $new_instance['movieGenres'];
-        $instance['tvChecked'] = $new_instance['tvChecked'];
         $instance['tvGenres'][] = $new_instance['tvGenres'];
         return $instance;
     }
