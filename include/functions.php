@@ -78,11 +78,21 @@ function esgi_tmdb_config_page() {
     <?php
 }
 
+// Add script for shortcode
 add_action('admin_enqueue_scripts', 'esgi_generate_shortcode');
 function esgi_generate_shortcode($hook) {
     global $slug;
     if ($hook == "toplevel_page_".$slug) {
-        wp_enqueue_script('generate_shortcode', plugin_dir_url(__FILE__) . 'script.js');
+        wp_enqueue_script('generate_shortcode', plugin_dir_url(__FILE__) . 'script-shortcode.js');
+    }
+}
+
+// Add script for widget back
+add_action('admin_enqueue_scripts', 'esgi_widget_script');
+function esgi_widget_script($hook) {
+    global $pagenow;
+    if ($pagenow == 'widgets.php') {
+        wp_enqueue_script('widget_script', plugin_dir_url(__FILE__) . 'script-widget.js');
     }
 }
 
