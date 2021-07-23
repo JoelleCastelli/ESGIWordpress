@@ -4,7 +4,7 @@
 class EsgiTmdbWidget extends WP_Widget
 {
 
-    private EsgiTmdb $tmdb;
+    private $tmdb;
 
     public function __construct()
     {
@@ -43,7 +43,7 @@ class EsgiTmdbWidget extends WP_Widget
     {
         if($this->tmdb->getTmdbKey()) {
             // Title
-            $title = $instance['title'] ?? '';
+            $title = isset($instance['title']) ? $instance['title'] : '';
             echo '<p>
                   <label for="' . $this->get_field_name('title') . '"><b>Titre du widget&nbsp;:</b></label>
                   <input class="widefat" id="' . $this->get_field_name('title') . '" name="' . $this->get_field_name('title') . '" type="text" value="' . $title . '">
@@ -71,7 +71,7 @@ class EsgiTmdbWidget extends WP_Widget
         }
     }
 
-    public function update($new_instance, $old_instance): array
+    public function update($new_instance, $old_instance)
     {
         $instance = [];
         $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';

@@ -4,33 +4,33 @@
 class EsgiTmdb
 {
 
-    protected string $tmdbApiBaseUrl = "https://api.themoviedb.org/3/";
-    protected string $tmdbImageUrl = "https://image.tmdb.org/t/p/w200";
-    protected string $tmdbBaseUrl = "https://www.themoviedb.org/";
-    protected string $language;
-    protected string $region;
-    protected ?string $tmdbKey = null;
-    protected array $tvGenres = [];
-    protected array $movieGenres = [];
+    protected $tmdbApiBaseUrl = "https://api.themoviedb.org/3/";
+    protected $tmdbImageUrl = "https://image.tmdb.org/t/p/w200";
+    protected $tmdbBaseUrl = "https://www.themoviedb.org/";
+    protected $language;
+    protected $region;
+    protected $tmdbKey = null;
+    protected $tvGenres = [];
+    protected $movieGenres = [];
 
 
     public function __construct()
     {
         $this->language = str_replace("_", "-", get_locale());
         $this->region = substr($this->language, 0, 2);
-        $this->tmdbKey = get_option('esgi_tmdb_settings')['tmdb-key'] ?? '';
+        $this->tmdbKey = isset(get_option('esgi_tmdb_settings')['tmdb-key']) ? get_option('esgi_tmdb_settings')['tmdb-key'] : '';
         if($this->tmdbKey) {
             $this->esgi_get_genres('tv');
             $this->esgi_get_genres('movie');
         }
     }
 
-    public function getTvGenres(): array
+    public function getTvGenres()
     {
         return $this->tvGenres;
     }
 
-    public function getMovieGenres(): array
+    public function getMovieGenres()
     {
         return $this->movieGenres;
     }
@@ -40,7 +40,7 @@ class EsgiTmdb
         return $this->tmdbKey;
     }
 
-    public function setTmdbKey($tmdbKey): void
+    public function setTmdbKey($tmdbKey)
     {
         $this->tmdbKey = $tmdbKey;
     }
@@ -67,13 +67,13 @@ class EsgiTmdb
         return false;
     }
 
-    public function esgi_get_tmdb_preview($work): string
+    public function esgi_get_tmdb_preview($work)
     {
-        $name = $work->title ?? $work->name;
+        $name = isset($work->title) ? $work->title : $work->name;
         $poster = $this->tmdbImageUrl.$work->poster_path;
         $type = $work->type == 'tv' ? "Série" : "Film";
         $url = $this->tmdbBaseUrl.$work->type.'/'.$work->id;
-        $date = date("Y", strtotime($work->release_date ?? $work->first_air_date));
+        $date = date("Y", strtotime(isset($work->release_date) ? $work->release_date : $work->first_air_date));
 
         $preview = "<a href='$url' target='_blank'><div class='esgi_tmdb_preview' style='text-align: center'>";
         $preview .= "<div class='esgi_tmdb_preview_poster'><img src='$poster'/></div>";
@@ -94,7 +94,7 @@ class EsgiTmdb
         }
     }
 
-    public function esgi_generate_url_array($types, $genres = null): array
+    public function esgi_generate_url_array($types, $genres = null)
     {
         $urlArray = [];
         foreach ($types as $type => $activated) {
@@ -113,7 +113,7 @@ class EsgiTmdb
     }
 
     // Check if at least one type (tv or movie) is checked
-    public function esgi_check_types_array($types): bool
+    public function esgi_check_types_array($types)
     {
         foreach ($types as $type => $activated) {
             if($activated == true) return true;
