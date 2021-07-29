@@ -122,7 +122,7 @@ class EsgiTmdbWidget extends WP_Widget
     { ?>
         <?php $genres = $type === "movie" ? $this->tmdb->getMovieGenres() : $this->tmdb->getTvGenres();
         foreach ($genres as $id => $name) { ?>
-            <input class="checkbox tvGenres" type="checkbox" <?php if (isset($instance[$type . '-' . $id])) checked($instance[$type . '-' . $id], 'on'); ?> id="<?= $this->get_field_id($type . '-' . $id); ?>" name="<?= $this->get_field_name($type . '-' . $id); ?>" />
+            <input class="checkbox" type="checkbox" <?php if (isset($instance[$type . '-' . $id])) checked($instance[$type . '-' . $id], 'on'); ?> id="<?= $this->get_field_id($type . '-' . $id); ?>" name="<?= $this->get_field_name($type . '-' . $id); ?>" />
             <label for="<?= $this->get_field_id($type . '-' . $id); ?>"><?= $name ?></label>
 <?php }
     }
