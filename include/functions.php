@@ -25,7 +25,7 @@ function esgi_tmdb_config_page() {
             Pour obtenir votre clé API, consultez la <a href="https://developers.themoviedb.org/3/getting-started/introduction" target="_blank">documentation TMDB</a>.
             <form action="options.php" method="POST">
                 <?php
-                settings_fields('esgi_tmdb_settings');
+                settings_fields('esgi_tmdb_settings'); 
                 do_settings_sections('esgi_tmdb_settings_page');
                 submit_button();
                 ?>
@@ -84,15 +84,6 @@ function esgi_generate_shortcode($hook) {
     global $slug;
     if ($hook == "toplevel_page_".$slug) {
         wp_enqueue_script('generate_shortcode', plugin_dir_url(__FILE__) . 'script-shortcode.js');
-    }
-}
-
-// Add script for widget back
-add_action('admin_enqueue_scripts', 'esgi_widget_script');
-function esgi_widget_script($hook) {
-    global $pagenow;
-    if ($pagenow == 'widgets.php') {
-        wp_enqueue_script('widget_script', plugin_dir_url(__FILE__) . 'script-widget.js');
     }
 }
 
